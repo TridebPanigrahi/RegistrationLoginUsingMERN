@@ -37,10 +37,10 @@ const Register = () => {
                 </div>
                </div>
                <div className="btn">
-                    <button>Submit</button>
+                    <button>Register</button>
                </div>
                <div className="account">
-                    <p>Already have an Account? <a href="">Login Now!</a></p>
+                    <p>Already have an Account? <a href="/login">Login Now!</a></p>
                </div>
             </div>
         </div>
