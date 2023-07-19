@@ -1,7 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ragister.css';
+import axios from 'axios';
 
 const Register = () => {
+    const [data, setData] =useState({
+        name:"",
+        phone:null,
+        email:"",
+        password:"",
+        gender:""
+    })
+
+    const payload ={...data}
+
+    const handleRegister =(e)=>{
+        e.preventDefault()
+        // fetch('http://localhost:5000/register',{
+        //     method:"POST",
+        //     crossDomain:true,
+        //     headers:{
+        //         "Content-Type":"application/json",
+        //         Accept:"application/json",
+        //         "Access-Control-Arrow-Origin":"*"
+        //     },
+        //     body:JSON.stringify({
+        //         payload
+        //     })
+        // })
+        // .then((res)=>res.json())
+        // .then((val)=>{
+        //     console.log(val, "UserRegister");
+        // })
+        axios.post("http://localhost:5000/register", payload)
+        .then((res)=>{
+            console.log("Data added successfully")
+        })
+        .catch((res)=>{
+            console.log("error in data")
+        })
+    }
+
   return (
     <div>
         <div className="container">
@@ -11,33 +49,33 @@ const Register = () => {
                 </div>
                <div className='fname flex'>
                 <label htmlFor="name">Name</label>
-                <input type="text" name="" id="name" placeholder='Enter Name'/>
+                <input type="text" name="" id="name" onChange={(e)=>setData({...data, name:e.target.value})} placeholder='Enter Name'/>
                </div>
                <div className='fname flex'>
                 <label htmlFor="phone">Phone</label>
-                <input type="tel" name="" id="phone" placeholder='Enter Phone Number'/>
+                <input type="tel" name="" onChange={(e)=>setData({...data, phone:e.target.value})} id="phone" placeholder='Enter Phone Number'/>
                </div>
                <div className='fname flex'>
                 <label htmlFor="email">Email</label>
-                <input type="email" name="" id="email" placeholder='Enter Email'/>
+                <input type="email" name="" id="email" onChange={(e)=>setData({...data, email:e.target.value})} placeholder='Enter Email'/>
                </div>
                <div className='fname flex'>
                 <label htmlFor="password">Password</label>
-                <input type="password" name="" id="password" placeholder='Enter Password'/>
+                <input type="password" name="" id="password" onChange={(e)=>setData({...data, password:e.target.value})} placeholder='Enter Password'/>
                </div>
                <div className='fname flex'>
                 <label htmlFor="gender">Gender</label>
                 <div className="gender">
-                    <input type="radio" name="gender" id="male" value="male" />
+                    <input type="radio" name="gender" id="male" value="male" onChange={(e)=>setData({...data, gender:e.target.value})}/>
                     <label htmlFor="male">Male</label>
-                    <input type="radio" name="gender" id="female" value="female"/>
+                    <input type="radio" name="gender" id="female" value="female" onChange={(e)=>setData({...data, gender:e.target.value})}/>
                     <label htmlFor="female">Female</label>
-                    <input type="radio" name="gender" id="others"  value="others"/>
+                    <input type="radio" name="gender" id="others"  value="others" onChange={(e)=>setData({...data, gender:e.target.value})}/>
                     <label htmlFor="others">Others</label>
                 </div>
                </div>
                <div className="btn">
-                    <button>Register</button>
+                    <button onClick={handleRegister}>Register</button>
                </div>
                <div className="account">
                     <p>Already have an Account? <a href="/login">Login Now!</a></p>

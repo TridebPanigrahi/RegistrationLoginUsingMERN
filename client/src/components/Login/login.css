@@ -1,3 +1,18 @@
 .container .login{
     height: 16rem;
 }
+.container .login .terms{
+    /* display: flex;
+    justify-content: flex-end; */
+    margin-bottom: 1rem;
+}
+.container .login .terms .condition input{
+    cursor: pointer;
+}
+.container .login .terms .condition label{
+    margin-left: .5rem;
+}
+.container .login .terms .condition label a{
+    text-decoration: none;
+    color: gray;
+}

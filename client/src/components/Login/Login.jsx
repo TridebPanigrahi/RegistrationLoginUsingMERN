@@ -17,6 +17,12 @@ const Login = () => {
                 <label htmlFor="password">Password</label>
                 <input type="password" name="" id="password" placeholder='Enter Password'/>
                 </div>
+                <div className='terms'>
+                    <div className='condition'>
+                        <input type="checkbox" name="" id="password"/>
+                        <label htmlFor="password"><a href="/terms">Terms & Condition</a></label>
+                    </div>
+                </div>
                 <div className="btn">
                     <button>Login</button>
                 </div>
