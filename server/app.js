@@ -8,6 +8,10 @@ app.use(cors())
 
 const bcrypt = require("bcryptjs");
 
+const jwt = require("jsonwebtoken")
+
+const JWT_SECRET ="jksdfoiwenf894287ewrhu24r9yoiwefoiuwe98430813hiqfer9713gnjvqbbfhdsihbqw"
+
 
 const mongoUrl ="mongodb+srv://tanu:tanu@cluster0.spfyxxp.mongodb.net/?retryWrites=true&w=majority"
 
@@ -45,7 +49,26 @@ app.post("/register", async(req, res)=>{
     } catch (error) {
         res.send({status:"Error"})
     }
-})
+});
+
+app.post("/login-user", async (req, res)=>{
+    const {email, password} =req.body;
+
+    const user = await User.findOne({email})
+    if(!user){
+        return res.json({error: "User Not found"})
+    }
+    if(await bcrypt.compare(password, user.password)){
+        const token = jwt.sign({}, JWT_SECRET)
+        if(res.status(201)){
+            res.json({status:"OK", data:token})
+        }
+        else{
+            res.json({error:"error"})
+        }
+    }
+    res.json({status:"error", error:"Invalid Password"})
+});
 
 
 app.listen(5000,()=>{
