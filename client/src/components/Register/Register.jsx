@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './ragister.css';
 import axios from 'axios';
+import {Link, useNavigate} from 'react-router-dom'
 
 const Register = () => {
     const [data, setData] =useState({
@@ -10,33 +11,19 @@ const Register = () => {
         password:"",
         gender:""
     })
+    const navigate = useNavigate()
 
     const payload ={...data}
 
     const handleRegister =(e)=>{
         e.preventDefault()
-        // fetch('http://localhost:5000/register',{
-        //     method:"POST",
-        //     crossDomain:true,
-        //     headers:{
-        //         "Content-Type":"application/json",
-        //         Accept:"application/json",
-        //         "Access-Control-Arrow-Origin":"*"
-        //     },
-        //     body:JSON.stringify({
-        //         payload
-        //     })
-        // })
-        // .then((res)=>res.json())
-        // .then((val)=>{
-        //     console.log(val, "UserRegister");
-        // })
         axios.post("http://localhost:5000/register", payload)
         .then((res)=>{
-            console.log("Data added successfully")
+            console.log(res.data)
+            navigate("/login")
         })
-        .catch((res)=>{
-            console.log("error in data")
+        .catch((err)=>{
+            console.log(err)
         })
     }
 
@@ -78,7 +65,7 @@ const Register = () => {
                     <button onClick={handleRegister}>Register</button>
                </div>
                <div className="account">
-                    <p>Already have an Account? <a href="/login">Login Now!</a></p>
+                    <p>Already have an Account? <Link to="/login">Login Now!</Link></p>
                </div>
             </div>
         </div>

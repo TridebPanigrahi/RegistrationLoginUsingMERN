@@ -7,10 +7,8 @@ const UserDetailsSchema = new mongoose.Schema(
         email:{type:String, unique:true},
         password:String,
         gender:String,
-    },
-    {
-        collation:"UserInfo"
     }
 );
 
-mongoose.model("UserInfo", UserDetailsSchema);
+const userModel = mongoose.model("registers", UserDetailsSchema);
+module.exports = userModel

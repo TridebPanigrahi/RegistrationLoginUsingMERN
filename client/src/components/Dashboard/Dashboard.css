@@ -1,0 +1,38 @@
+
+.dashboardcontainer .dashdisplay{
+    width: 90%;
+    height: 90vh;
+    box-shadow: 0 5px 5px 5px rgba(0,0,0,0.1);
+    background-color: #eee;
+    border-radius: 10px;
+    display: flex;
+    /* align-items: center; */
+}
+.dashboardcontainer .dashdisplay .leftside{
+    height: 90vh;
+    width: 13rem;
+    background-color: rgb(128, 216, 216);
+    border: gray;
+    border-radius: 10px 0 0 10px;
+    
+}
+
+.dashboardcontainer .dashdisplay .rightside{
+    padding: 1rem;
+    position: relative;
+}
+.dashboardcontainer .dashdisplay .rightside .allcards{
+    display: grid;
+    grid-template-columns: repeat(3, 0.5fr);
+    grid-gap: 2rem;
+    position: absolute;
+
+}
+.dashboardcontainer .dashdisplay .rightside .allcards .cards{
+    height: 150px;
+    width: 150px;
+    padding: 1rem;
+    box-shadow: 0 5px 5px 5px rgba(0,0,0,0.1);
+    border-radius: 5px;
+    background-color: #fff;
+}

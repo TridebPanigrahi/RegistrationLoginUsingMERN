@@ -1,19 +1,23 @@
 const express = require("express");
-const app = express();
 const mongoose = require("mongoose")
+const cors = require("cors")
+const userModel = require("./userDetails")
+
+const app = express();
 app.use(express.json())
 
-const cors = require("cors")
 app.use(cors())
 
 const bcrypt = require("bcryptjs");
 
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const { Collection } = require("mongodb");
 
 const JWT_SECRET ="jksdfoiwenf894287ewrhu24r9yoiwefoiuwe98430813hiqfer9713gnjvqbbfhdsihbqw"
 
 
-const mongoUrl ="mongodb+srv://tanu:tanu@cluster0.spfyxxp.mongodb.net/?retryWrites=true&w=majority"
+// const mongoUrl ="mongodb+srv://tanu:tanu@cluster0.spfyxxp.mongodb.net/?retryWrites=true&w=majority"
+const mongoUrl ="mongodb://127.0.0.1:27017/employee"
 
 
 mongoose.connect(mongoUrl,{
@@ -21,54 +25,60 @@ mongoose.connect(mongoUrl,{
 }).then(()=>{console.log("connected to database");})
 .catch(e=>console.log(e))
 
-require("./userDetails")
-
-const User = mongoose.model("UserInfo")
 
 app.post("/register", async(req, res)=>{
-    const {name, phone, email, password, gender} = req.body;
-
-    const encryptedPassword = await bcrypt.hash(password, 10)
-    try {
-
-        // const oldUser1 =await User.findOne({email});
-        // const oldUser2 =await User.findOne({phone});
-
-        // if(oldUser1 || oldUser2){
-        //    return res.send({error:"User Exist"});
-        // }
-
-        await User.create({
-            name,
-            phone,
-            email,
-            password:encryptedPassword,
-            gender
-        })
-        res.send({status:"OK"})
-    } catch (error) {
-        res.send({status:"Error"})
-    }
+   userModel.create(req.body)
+   .then((employees)=>{
+        res.json(employees)
+   })
+   .catch((err)=>{
+        res.json(err)
+   })
 });
 
-app.post("/login-user", async (req, res)=>{
-    const {email, password} =req.body;
 
-    const user = await User.findOne({email})
-    if(!user){
-        return res.json({error: "User Not found"})
-    }
-    if(await bcrypt.compare(password, user.password)){
-        const token = jwt.sign({}, JWT_SECRET)
-        if(res.status(201)){
-            res.json({status:"OK", data:token})
+app.post("/login", (req,res)=>{
+    const {email, password} = req.body;
+    userModel.findOne({email:email})
+    .then(user=>{
+        if(user){
+            if(user.password === password){
+                res.json("Success")
+            }
+            else{
+                res.json("the password is incorrect")
+            }
         }
         else{
-            res.json({error:"error"})
+            res.json("No record existed")
         }
-    }
-    res.json({status:"error", error:"Invalid Password"})
-});
+    })
+    .catch((err)=>{
+        console.log(err)
+    })
+  
+})
+
+
+
+// app.post("/login-user", async (req, res)=>{
+//     const {email, password} =req.body;
+
+//     const user = await User.findOne({email})
+//     if(!user){
+//         return res.json({error: "User Not found"})
+//     }
+//     if(await bcrypt.compare(password, user.password)){
+//         const token = jwt.sign({}, JWT_SECRET)
+//         if(res.status(201)){
+//             res.json({status:"OK", data:token})
+//         }
+//         else{
+//             res.json({error:"error"})
+//         }
+//     }
+//     res.json({status:"error", error:"Invalid Password"})
+// });
 
 
 app.listen(5000,()=>{
