@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose")
 const cors = require("cors")
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const userModel = require("./userDetails")
 
 const app = express();
@@ -8,9 +10,7 @@ app.use(express.json())
 
 app.use(cors())
 
-const bcrypt = require("bcryptjs");
 
-const jwt = require("jsonwebtoken");
 const { Collection } = require("mongodb");
 
 const JWT_SECRET ="jksdfoiwenf894287ewrhu24r9yoiwefoiuwe98430813hiqfer9713gnjvqbbfhdsihbqw"
@@ -27,37 +27,76 @@ mongoose.connect(mongoUrl,{
 
 
 app.post("/register", async(req, res)=>{
-   userModel.create(req.body)
-   .then((employees)=>{
-        res.json(employees)
-   })
-   .catch((err)=>{
-        res.json(err)
-   })
+    const {name, phone, email, password, gender} =req.body;
+    const encriptedPassword = await bcrypt.hash(password, 10)
+   try {
+    const oldUser = await userModel.findOne({email})
+    if(oldUser){
+       return res.json("userexist")
+    }
+    else{
+        await userModel.create({
+            name,
+            phone,
+            email,
+            password:encriptedPassword,
+            gender
+        })
+        .then((employees)=>{
+             res.json(employees)
+        })
+        .catch((err)=>{
+             res.json(err)
+        })
+    }
+
+   } catch (error) {
+        res.json(error)
+   }
 });
 
 
-app.post("/login", (req,res)=>{
+app.post("/login", async(req,res)=>{
     const {email, password} = req.body;
-    userModel.findOne({email:email})
-    .then(user=>{
-        if(user){
-            if(user.password === password){
-                res.json("Success")
+    const user = await userModel.findOne({email:email})
+    if(!user){
+       return res.json("User not Exist")
+    }
+    else{
+        if(await bcrypt.compare(password, user.password)){
+            const token = jwt.sign({},JWT_SECRET)
+            if(res.status(201)){
+                return res.json({status:"Success", data:token})
             }
             else{
-                res.json("the password is incorrect")
+                return res.json({status:"error"})
             }
         }
         else{
-            res.json("No record existed")
+            res.json("the password is incorrect")
         }
-    })
-    .catch((err)=>{
-        console.log(err)
-    })
+    }
   
 })
+
+// app.post("/userdata", async(req, res)=>{
+//     const {token} = req.body;
+//     try {
+        
+//         const secret = jwt.verify(token, JWT_SECRET)
+//         const useremail = secret.email;
+//         secret.findOne({email:useremail})
+//         .then((data)=>{
+//             res.send({status:"OK", data:data})
+//         })
+//         .catch((err)=>{
+//             res.send({status:"error", data:err})
+//         })
+
+//     } catch (error) {
+        
+//     }
+// })
 
 
 

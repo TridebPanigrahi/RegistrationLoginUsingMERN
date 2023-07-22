@@ -16,8 +16,8 @@ const Login = () => {
         axios.post('http://localhost:5000/login', {...data})
         .then((res)=>{
             console.log(res.data)
-            if(res.data === "Success"){
-                history("/dashboard")
+            if(res.data.status === "Success"){
+                history("/dashboard",)
             }
         })
         .catch((err)=>{

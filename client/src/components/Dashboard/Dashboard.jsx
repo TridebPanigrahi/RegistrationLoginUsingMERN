@@ -1,10 +1,8 @@
 import React from 'react'
 import './Dashboard.css'
-// import {useLocation} from 'react-router-dom'
 
-const Dashboard = () => {
+const Dashboard = ({id}) => {
 
-    // const location = useLocation()
 
   return (
     <div>
@@ -22,7 +20,6 @@ const Dashboard = () => {
                     </ul>
                 </div>
                 <div className="rightside">
-                    {/* <div>Hello {location.state.id} and Welcome to the Dashboard</div> */}
                     <div className="allcards">
                         <div className="cards">
 

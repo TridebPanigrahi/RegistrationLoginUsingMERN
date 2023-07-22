@@ -20,7 +20,12 @@ const Register = () => {
         axios.post("http://localhost:5000/register", payload)
         .then((res)=>{
             console.log(res.data)
-            navigate("/login")
+            if(res.data === "userexist"){
+                alert("User Already Exist")
+            }
+            else{
+                navigate("/login")
+            }
         })
         .catch((err)=>{
             console.log(err)
